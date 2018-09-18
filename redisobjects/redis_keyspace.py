@@ -1,5 +1,5 @@
 from .serializer import IdentitySerializer
-from .redis_state import RedisState
+from .redis_atom import RedisAtom
 from .redis_list import RedisList
 from .redis_dict import RedisDict
 
@@ -18,9 +18,9 @@ class RedisKeyspace:
             raise RuntimeError('Not all placeholders have been replaced for `%s`' % (key,))
         return key
 
-    def state(self, *keys, value_serializer=IdentitySerializer()):
+    def atom(self, *keys, value_serializer=IdentitySerializer()):
         key = self._make_key(*keys)
-        return RedisState(self.connection, key, value_serializer)
+        return RedisAtom(self.connection, key, value_serializer)
 
     def list(self, *keys, value_serializer=IdentitySerializer()):
         key = self._make_key(*keys)

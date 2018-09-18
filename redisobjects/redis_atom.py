@@ -2,7 +2,7 @@ from .serializer import IdentitySerializer
 
 import aioredis
 
-class RedisState:
+class RedisAtom:
     def __init__(self, connection, key, serializer=IdentitySerializer()):
         self.connection = connection
         self.key = key
