@@ -10,9 +10,9 @@ Examples
 import redisobjects
 import asyncio
 
-async def main():
+async def main(loop):
     # Initialize and declare
-    redis = await redisobjects.connect('redis://localhost')
+    redis = await redisobjects.connect('redis://localhost', loop=loop)
     keyspace = redis.keyspace('?')
     atom = keyspace.atom('test')
     # Show that the value is not set.
@@ -25,6 +25,6 @@ async def main():
     await atom.remove()
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+loop.run_until_complete(main(loop))
 loop.close()
 ```
