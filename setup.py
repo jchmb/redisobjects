@@ -12,7 +12,7 @@ classifiers = [
 
 setup(
     name='redisobjects',
-    version='0.3.0',
+    version='0.3.1',
     description='Object-oriented wrapper for aioredis.',
     long_description=long_description,
     author='Jochem Barelds',
