@@ -19,6 +19,7 @@ setup(
     author_email='barelds.jochem@gmail.com',
     url='https://gitlab.com/jchmb/redisobjects',
     packages=find_packages(exclude=['tests', 'examples']),
+    python_requires='>=3.6',
     install_requires=install_requires,
     include_package_data=True,
     classifiers=classifiers,
