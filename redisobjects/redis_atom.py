@@ -21,3 +21,18 @@ class RedisAtom:
 
     async def remove(self):
         return await self.connection.execute('del', self.key) > 0
+
+    async def increment(self, n=1):
+        if n == 1:
+            return await self.connection.execute('incr', self.key)
+        else:
+            return await self.connection.execute('incrby', self.key, n)
+
+    async def decrement(self, n=1):
+        if n == 1:
+            return await self.connection.execute('decr', self.key)
+        else:
+            return await self.connection.execute('decrby', self.key, n)
+
+    async def get_set(self, value):
+        return await self.connection.execute('getset', self.key, self.serializer.serialize(value))
