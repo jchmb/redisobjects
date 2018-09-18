@@ -2,6 +2,7 @@ from .serializer import IdentitySerializer
 from .redis_atom import RedisAtom
 from .redis_list import RedisList
 from .redis_dict import RedisDict
+from .redis_set import RedisSet
 
 class RedisKeyspace:
     def __init__(self, connection, keyspace='?', *key_serializers):
@@ -29,3 +30,7 @@ class RedisKeyspace:
     def dict(self, *keys, value_serializer=IdentitySerializer(), field_serializer=IdentitySerializer()):
         key = self._make_key(*keys)
         return RedisDict(self.connection, key, value_serializer, field_serializer)
+
+    def set(self, *keys, value_serializer=IdentitySerializer()):
+        key = self._make_key(*keys)
+        return RedisSet(self.connection, key, value_serializer)
