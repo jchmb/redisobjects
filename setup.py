@@ -4,6 +4,11 @@ with open('README.md', 'r') as f:
     long_description = f.read()
 
 install_requires = ['aioredis']
+classifiers = [
+    'Topic :: Database',
+    'Topic :: Database :: Database Engines/Servers',
+    'License :: OSI Approved :: MIT License',
+]
 
 setup(
     name='redisobjects',
@@ -16,4 +21,5 @@ setup(
     packages=find_packages(exclude=['tests', 'examples']),
     install_requires=install_requires,
     include_package_data=True,
+    classifiers=classifiers,
 )
