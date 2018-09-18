@@ -17,6 +17,7 @@ setup(
     long_description=long_description,
     author='Jochem Barelds',
     author_email='barelds.jochem@gmail.com',
+    license='MIT',
     url='https://gitlab.com/jchmb/redisobjects',
     packages=find_packages(exclude=['tests', 'examples']),
     python_requires='>=3.6',
