@@ -1,5 +1,6 @@
 from .serializer import IdentitySerializer
 from .redis_state import RedisState
+from .redis_list import RedisList
 
 class RedisKeyspace:
     def __init__(self, connection, keyspace='?', *key_serializers):
@@ -19,3 +20,7 @@ class RedisKeyspace:
     def state(self, *keys, value_serializer=IdentitySerializer()):
         key = self._make_key(*keys)
         return RedisState(self.connection, key, value_serializer)
+
+    def list(self, *keys, value_serializer=IdentitySerializer()):
+        key = self._make_key(*keys)
+        return RedisList(self.connection, key, value_serializer)

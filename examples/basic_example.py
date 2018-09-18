@@ -1,6 +1,5 @@
 import redisobjects
 import asyncio
-import uuid
 
 async def main():
     # Initialize and declare
