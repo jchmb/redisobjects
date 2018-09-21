@@ -22,6 +22,9 @@ class RedisList:
         results = await self.connection.execute('lrange', self.key, 0, limit)
         return (self.serializer.deserialize(value) for value in results)
 
+    async def list(self, limit=1000):
+        return list(await self.items(limit))
+
     async def pop_left(self):
         result = await self.connection.execute('lpop', self.key)
         return self.serializer.deserialize(result)

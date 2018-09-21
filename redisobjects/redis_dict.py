@@ -19,6 +19,9 @@ class RedisDict:
         size = int(len(results) / 2)
         return ((self.field_serializer.deserialize(results[2 * i]), self.value_serializer.deserialize(results[2 * i + 1])) for i in range(size))
 
+    async def dict(self):
+        return dict(await self.items())
+
     async def size(self):
         return await self.connection.execute('hlen', self.key)
 

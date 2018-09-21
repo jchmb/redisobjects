@@ -29,6 +29,9 @@ class RedisSet:
 		results = await self.connection.execute('smembers', self.key)
 		return self._deserialize_values(results)
 
+	async def set(self):
+		return set(await self.items())
+
 	async def intersect(self, *redis_sets):
 		return await self._apply_set_operator('sinter', *redis_sets)
 

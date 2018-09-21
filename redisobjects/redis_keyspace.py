@@ -1,36 +1,20 @@
 from .serializer import IdentitySerializer
-from .redis_atom import RedisAtom
-from .redis_list import RedisList
-from .redis_dict import RedisDict
-from .redis_set import RedisSet
+from .redis_object_factory import RedisObjectFactory
 
-class RedisKeyspace:
-    def __init__(self, connection, keyspace='?', *key_serializers):
-        self.connection = connection
+from shortuuid import uuid
+
+class RedisKeyspace(RedisObjectFactory):
+    def __init__(self, connection, keyspace='?', key_serializer=IdentitySerializer(), key_factory=lambda: str(uuid())):
+        RedisObjectFactory.__init__(self, connection)
         self.placeholder = '?'
         self.keyspace = keyspace
-        self.key_serializers = key_serializers if len(key_serializers) > 0 else [IdentitySerializer()] * (keyspace.count(self.placeholder))
+        self.key_factory = key_factory
 
-    def _make_key(self, *keys):
-        key = self.keyspace
-        for i in range(len(keys)):
-            key = key.replace(self.placeholder, self.key_serializers[i].serialize(keys[i]))
-        if self.placeholder in key:
-            raise RuntimeError('Not all placeholders have been replaced for `%s`' % (key,))
-        return key
-
-    def atom(self, *keys, value_serializer=IdentitySerializer()):
-        key = self._make_key(*keys)
-        return RedisAtom(self.connection, key, value_serializer)
-
-    def list(self, *keys, value_serializer=IdentitySerializer()):
-        key = self._make_key(*keys)
-        return RedisList(self.connection, key, value_serializer)
-
-    def dict(self, *keys, value_serializer=IdentitySerializer(), field_serializer=IdentitySerializer()):
-        key = self._make_key(*keys)
-        return RedisDict(self.connection, key, value_serializer, field_serializer)
-
-    def set(self, *keys, value_serializer=IdentitySerializer()):
-        key = self._make_key(*keys)
-        return RedisSet(self.connection, key, value_serializer)
+    def _make_key(self, key=None):
+        if key is None:
+            key = self.key_factory()
+        serialized_key = self.key_serializer.serialize(key)
+        complete_key = self.keyspace.replace(self.placeholder, serialized_key)
+        if self.placeholder in complete_key:
+            raise RuntimeError('Not all placeholders have been replaced for `%s`' % (complete_key,))
+        return complete_key

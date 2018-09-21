@@ -1,25 +1,16 @@
 import redisobjects
 import asyncio
 
-async def main():
-    # Initialize and declare
-    redis = await redisobjects.connect('redis://localhost')
-    keyspace = redis.keyspace('test:?')
-    atom1 = keyspace.atom('1')
-    atom2 = keyspace.atom('2')
-    # Show that the values are not set.
-    print(await atom1.get())
-    print(await atom2.get())
-    # Change the values.
-    await atom1.set('abc')
-    await atom2.set('xyz')
-    # Demonstrate that the values have changed
-    print(await atom1.get())
-    print(await atom2.get())
-    # Clean up
-    await atom1.remove()
-    await atom2.remove()
+async def main(loop):
+    redis = await redisobjects.connect('redis://localhost', loop=loop)
+    atom = redis.atom('example.atom')
+    print(await atom.get())
+    await atom.set('bla')
+    print(await atom.get())
+    await atom.remove()
+    print(await atom.get())
+    redis.close()
 
 loop = asyncio.get_event_loop()
-loop.run_until_complete(main())
+loop.run_until_complete(main(loop))
 loop.close()
