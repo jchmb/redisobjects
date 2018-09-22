@@ -14,6 +14,9 @@ class RedisObjectFactory:
     def atom(self, key, value_serializer=IdentitySerializer()):
         return RedisAtom(self.connection, self._make_key(key), value_serializer)
 
+    def integer(self, key, value_serializer=IdentitySerializer()):
+        return RedisInteger(self.connection, self._make_key(key), value_serializer)
+
     def list(self, key, value_serializer=IdentitySerializer()):
         return RedisList(self.connection, self._make_key(key), value_serializer)
 

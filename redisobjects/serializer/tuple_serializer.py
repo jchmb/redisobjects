@@ -1,4 +1,4 @@
-from .serializer import IdentitySerializer
+from .identity_serializer import IdentitySerializer
 
 class TupleSerializer:
     def __init__(self, *value_serializers, separator=','):
@@ -19,6 +19,11 @@ class TupleSerializer:
             raise RuntimeError("Tuple must be of size %s" % (n,))
         return tuple((self.value_serializers[i].deserialize(parts[i]) for i in range(n)))
 
+    '''
+    Create a homogeneous TupleSerializer. In other words, lift some serializer f for some type T to
+    n-tuples of type T^n, apply the string join function for some separator s, and call the new function g.
+    Then g(x_1, x_2, ..., x_n) = s.join(f(x_1), f(x_2), ..., f(x_n)).
+    '''
     @staticmethod
     def create_homogeneous(self, n, value_serializer=IdentitySerializer(), *, separator=','):
         value_serializers = [value_serializer] * n

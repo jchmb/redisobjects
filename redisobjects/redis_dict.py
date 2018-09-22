@@ -7,8 +7,9 @@ class RedisDict:
         self.value_serializer = value_serializer
         self.field_serializer = field_serializer
 
-    async def set(self, field, value):
-        return await self.connection.execute('hset', self.key, self.field_serializer.serialize(field), self.value_serializer.serialize(value)) > 0
+    async def set(self, field, value, *, tx=None):
+        tx = tx or self.connection
+        return await tx.execute('hset', self.key, self.field_serializer.serialize(field), self.value_serializer.serialize(value)) > 0
 
     async def get(self, field):
         result = await self.connection.execute('hget', self.key, self.field_serializer.serialize(field))
@@ -25,6 +26,7 @@ class RedisDict:
     async def size(self):
         return await self.connection.execute('hlen', self.key)
 
-    async def remove(self, *fields):
+    async def remove(self, *fields, tx=None):
+        tx = tx or self.connection
         serialized_fields = [self.field_serializer.serialize(field) for field in fields]
-        return await self.connection.execute('hdel', self.key, *serialized_fields) == len(fields)
+        return await tx.execute('hdel', self.key, *serialized_fields) == len(fields)

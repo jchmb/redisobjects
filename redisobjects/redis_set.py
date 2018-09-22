@@ -17,13 +17,15 @@ class RedisSet:
 		results = await self.connection.execute(op, self.key, *keys)
 		return self._deserialize_values(results)
 
-	async def add(self, *values):
+	async def add(self, *values, tx=None):
+		tx = tx or self.connection
 		serialized_values = self._serialize_values(values)
-		return await self.connection.execute('sadd', self.key, *serialized_values)
+		return await tx.execute('sadd', self.key, *serialized_values)
 
-	async def remove(self, *values):
+	async def remove(self, *values, tx=None):
+		tx = tx or self.connection
 		serialized_values = self._serialize_values(values)
-		return await self.connection.execute('srem', self.key, *serialized_values)
+		return await tx.execute('srem', self.key, *serialized_values)
 
 	async def items(self):
 		results = await self.connection.execute('smembers', self.key)
@@ -58,6 +60,7 @@ class RedisSet:
 		results = await self.connection.execute('spop', self.key, n)
 		return self._deserialize_values(results)
 
-	async def move(self, value, redis_set):
+	async def move(self, value, redis_set, *, tx=None):
+		tx = tx or self.connection
 		serialized_value = self.value_serializer.serialize(value)
-		return await self.connection.execute('smove', self.key, redis_set.key, serialized_value)
+		return await tx.execute('smove', self.key, redis_set.key, serialized_value)
