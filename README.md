@@ -88,7 +88,7 @@ loop.run_until_complete(main(loop))
 loop.close()
 ```
 
-Example that shows how to use transaction:
+Example that shows how to use transactions:
 
 ```python
 import redisobjects

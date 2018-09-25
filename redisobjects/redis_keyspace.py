@@ -6,6 +6,7 @@ from shortuuid import uuid
 class RedisKeyspace(RedisObjectFactory):
     def __init__(self, connection, keyspace='?', key_serializer=IdentitySerializer(), key_factory=lambda: str(uuid())):
         RedisObjectFactory.__init__(self, connection)
+        self.key_serializer = key_serializer
         self.placeholder = '?'
         self.keyspace = keyspace
         self.key_factory = key_factory
