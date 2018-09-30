@@ -13,7 +13,7 @@ class TupleSerializer:
         return self.separator.join((self.value_serializers[i].serialize(value[i]) for i in range(len(value))))
 
     def deserialize(self, value):
-        parts = value.split(self.separator)
+        parts = value.decode().split(self.separator)
         n = len(self.value_serializers)
         if len(parts) != n:
             raise RuntimeError("Tuple must be of size %s" % (n,))
@@ -25,6 +25,6 @@ class TupleSerializer:
     Then g(x_1, x_2, ..., x_n) = s.join(f(x_1), f(x_2), ..., f(x_n)).
     '''
     @staticmethod
-    def create_homogeneous(self, n, value_serializer=IdentitySerializer(), *, separator=','):
+    def create_homogeneous(n, value_serializer=IdentitySerializer(), *, separator=','):
         value_serializers = [value_serializer] * n
         return TupleSerializer(*value_serializers, separator=separator)
