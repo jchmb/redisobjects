@@ -19,7 +19,9 @@ class RedisObjectSpace:
     def add_index(self, index, key_serializer=StringSerializer()):
         self.indexes[index] = RedisKeyspace('%s:__index__:%s:?' % (self.keyspace, index))
 
-    async def create(self, cls, key=None):
+    async def create(self, cls=None, key=None):
+        if cls is None:
+            cls = self.cls
         if key is None:
             key = self.key_factory()
         obj = cls()

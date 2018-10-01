@@ -2,7 +2,7 @@ from datetime import datetime
 
 class DateTimeSerializer:
     def serialize(self, dt):
-        return dt.timestamp()
+        return None if dt is None else dt.timestamp()
 
     def deserialize(self, value):
-        return datetime.fromtimestamp(value)
+        return None if value is None else datetime.fromtimestamp(value)
