@@ -4,6 +4,7 @@ from .set_mapper import SetMapper
 from .string_mapper import StringMapper
 from .index_mapper import IndexMapper
 from .datetime_mapper import DateTimeMapper
+from .uuid_mapper import UUIDMapper
 
 __all__ = [
     'AtomMapper',
@@ -11,4 +12,5 @@ __all__ = [
     'StringMapper',
     'IndexMapper',
     'DateTimeMapper',
+    'UUIDMapper',
 ]
