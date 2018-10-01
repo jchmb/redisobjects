@@ -1,5 +1,7 @@
 from .serializer import IdentitySerializer, StringSerializer, TupleSerializer
+from .redis_keyspace import RedisKeyspace
 from .redis_atom import RedisAtom
+from .mapper import IndexMapper
 
 import importlib
 import uuid
@@ -12,6 +14,10 @@ class RedisObjectSpace:
         self.key_serializer = key_serializer
         self.key_factory = key_factory
         self.cls_serializer = TupleSerializer.create_homogeneous(2, separator=':')
+        self.indexes = {}
+
+    def add_index(self, index, key_serializer=StringSerializer()):
+        self.indexes[index] = RedisKeyspace('%s:__index__:%s:?' % (self.keyspace, index))
 
     async def create(self, cls, key=None):
         if key is None:
@@ -41,10 +47,10 @@ class RedisObjectSpace:
         obj._id = key
         for attribute, prop in cls.model.items():
             complete_key = self.get_attribute_key(key, attribute)
-            setattr(obj, attribute, prop.map(self.db, complete_key))
+            setattr(obj, attribute, prop.map(self, attribute, self.db, complete_key, key))
 
     async def get_class(self, key):
-        cls_atom =  RedisAtom(self.db, self.get_attribute_key(key, '__class__'), self.cls_serializer)
+        cls_atom = RedisAtom(self.db, self.get_attribute_key(key, '__class__'), self.cls_serializer)
         if not await cls_atom.exists():
             return None
         module_name, cls_name = await cls_atom.get()
@@ -60,3 +66,17 @@ class RedisObjectSpace:
             obj = cls()
             self.hydrate(cls, obj, key)
         return obj
+
+    async def get_index_atom(self, index, value):
+        index_space = RedisKeyspace(self.db, '%s:__index__:%s:?' % (self.keyspace, index))
+        index_atom = index_space.atom(value)
+        return index_atom
+
+    async def find(self, index, value):
+        index_atom = await self.get_index_atom(index, value)
+        if index_atom is None:
+            return None
+        key = await index_atom.get()
+        if key is None:
+            return None
+        return await self.object(key.decode())

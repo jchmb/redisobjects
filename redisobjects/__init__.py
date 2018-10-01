@@ -3,6 +3,7 @@ from .redis_integer import RedisInteger
 from .redis_list import RedisList
 from .redis_dict import RedisDict
 from .redis_set import RedisSet
+from .redis_index_atom import RedisIndexAtom
 from .redis_keyspace import RedisKeyspace
 from .redis_object_space import RedisObjectSpace
 from .redis_manager import RedisManager
@@ -14,6 +15,7 @@ __all__ = [
     'RedisList',
     'RedisDict',
     'RedisSet',
+    'RedisIndexAtom',
     'RedisKeyspace',
     'RedisObjectSpace',
     'RedisManager',
