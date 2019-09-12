@@ -1,4 +1,4 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 
 import aioredis
 

@@ -1,7 +1,7 @@
-from .serializer import IdentitySerializer, StringSerializer, TupleSerializer
+from .serializers import IdentitySerializer, StringSerializer, TupleSerializer
 from .redis_keyspace import RedisKeyspace
 from .redis_atom import RedisAtom
-from .mapper import IndexMapper
+#from .redis_index_atom import RedisIndexAtom
 
 import importlib
 import uuid
@@ -26,7 +26,7 @@ class RedisObjectSpace:
             key = self.key_factory()
         obj = cls()
         self.hydrate(cls, obj, key)
-        cls_atom = RedisAtom(self.db, self.get_attribute_key(key, '__class__'), self.cls_serializer)
+        cls_atom = RedisAtom(connection=self.db, key=self.get_attribute_key(key, '__class__'), serializer=self.cls_serializer)
         await cls_atom.set((cls.__module__, cls.__name__))
         return obj
 
@@ -47,12 +47,17 @@ class RedisObjectSpace:
 
     def hydrate(self, cls, obj, key):
         obj._id = key
-        for attribute, prop in cls.model.items():
+        for attribute, prop in obj.__dict__.items():
             complete_key = self.get_attribute_key(key, attribute)
-            setattr(obj, attribute, prop.map(self, attribute, self.db, complete_key, key))
+            prop = getattr(obj, attribute)
+            prop.key = complete_key
+            prop.connection = self.db
+            # if isinstance(prop, RedisIndexAtom):
+            #     prop.index_space =
+            #setattr(obj, attribute, prop.map(self, attribute, self.db, complete_key, key))
 
     async def get_class(self, key):
-        cls_atom = RedisAtom(self.db, self.get_attribute_key(key, '__class__'), self.cls_serializer)
+        cls_atom = RedisAtom(connection=self.db, key=self.get_attribute_key(key, '__class__'), serializer=self.cls_serializer)
         if not await cls_atom.exists():
             return None
         module_name, cls_name = await cls_atom.get()

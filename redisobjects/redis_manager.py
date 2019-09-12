@@ -2,7 +2,7 @@ from .redis_keyspace import RedisKeyspace
 from .redis_object_space import RedisObjectSpace
 from .redis_object_factory import RedisObjectFactory
 from .redis_transaction import RedisTransaction
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 
 from aioredis import create_connection
 

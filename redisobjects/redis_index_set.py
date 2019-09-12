@@ -1,9 +1,9 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 from .redis_set import RedisSet
 from .redis_atom import RedisAtom
 
 class RedisIndexSet:
-    def __init__(self, connection, key, index_space, serializer=IdentitySerializer()):
+    def __init__(self, *, connection=None, key=None, index_space=None, serializer=IdentitySerializer()):
         self.connection = connection
         self.key = key
         self.index_space = index_space

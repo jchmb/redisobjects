@@ -1,13 +1,13 @@
-from .serializer import IdentitySerializer, StringSerializer
+from .serializers import IdentitySerializer, StringSerializer
 from .redis_atom import RedisAtom
 
 class RedisIndexAtom:
-    def __init__(self, *, connection=None, key=None, index_space=None, index_type=None, key_serializer=IdentitySerializer(), index_serializer=StringSerializer()):
+    def __init__(self, *, connection=None, key=None, index_space=None, index_type=None, primary_atom=None, key_serializer=IdentitySerializer(), index_serializer=StringSerializer()):
         self.connection = connection
         self.key = key
         self.index_space = index_space
         self.index_type = index_type
-        self.primary_atom = RedisAtom(connection, self._make_primary_key(), index_serializer)
+        self.primary_atom = primary_atom
         self.secondary_atom = None
         self.key_serializer = key_serializer
         self.index_serializer = index_serializer
@@ -24,7 +24,7 @@ class RedisIndexAtom:
         tx = tx or self.connection
         await self.primary_atom.set(value, tx=tx)
         if self.secondary_atom is None:
-            self.secondary_atom = RedisAtom(self.connection, self._make_secondary_key(value), self.key_serializer)
+            self.secondary_atom = RedisAtom(connection=self.connection, key=self._make_secondary_key(value), serializer=self.key_serializer)
         await self.secondary_atom.set(self.key, tx=tx)
 
     async def get(self):

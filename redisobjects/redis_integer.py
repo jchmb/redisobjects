@@ -1,5 +1,5 @@
 from .redis_atom import RedisAtom
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 
 class RedisInteger(RedisAtom):
     def __init__(self, *, connection=None, key=None, value_serializer=IdentitySerializer()):

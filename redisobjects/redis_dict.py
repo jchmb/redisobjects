@@ -1,7 +1,7 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 
 class RedisDict:
-    def __init__(self, connection=None, key=None, value_serializer=IdentitySerializer(), field_serializer=IdentitySerializer()):
+    def __init__(self, *, connection=None, key=None, value_serializer=IdentitySerializer(), field_serializer=IdentitySerializer()):
         self.connection = connection
         self.key = key
         self.value_serializer = value_serializer

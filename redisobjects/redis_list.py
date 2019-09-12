@@ -1,4 +1,4 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 
 '''
 RedisList represents a linked list in Redis. This class supports push and pop operators,

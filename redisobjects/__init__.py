@@ -8,6 +8,7 @@ from .redis_keyspace import RedisKeyspace
 from .redis_object_space import RedisObjectSpace
 from .redis_manager import RedisManager
 from .connect import connect
+#from .decorators import indexed
 
 __all__ = [
     'RedisAtom',
@@ -20,4 +21,5 @@ __all__ = [
     'RedisObjectSpace',
     'RedisManager',
     'connect',
+    #'indexed',
 ]
