@@ -8,7 +8,7 @@ async method get() to retrieve its value from the database and use the async met
 set(x) to change its value to x.
 '''
 class RedisAtom:
-    def __init__(self, connection, key, serializer=IdentitySerializer()):
+    def __init__(self, *, connection=None, key=None, serializer=IdentitySerializer()):
         self.connection = connection
         self.key = key
         self.serializer = serializer

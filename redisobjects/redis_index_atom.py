@@ -2,7 +2,7 @@ from .serializer import IdentitySerializer, StringSerializer
 from .redis_atom import RedisAtom
 
 class RedisIndexAtom:
-    def __init__(self, connection, key, index_space, index_type, key_serializer=IdentitySerializer(), index_serializer=StringSerializer()):
+    def __init__(self, *, connection=None, key=None, index_space=None, index_type=None, key_serializer=IdentitySerializer(), index_serializer=StringSerializer()):
         self.connection = connection
         self.key = key
         self.index_space = index_space

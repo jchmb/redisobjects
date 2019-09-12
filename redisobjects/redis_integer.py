@@ -2,7 +2,7 @@ from .redis_atom import RedisAtom
 from .serializer import IdentitySerializer
 
 class RedisInteger(RedisAtom):
-    def __init__(self, connection, key, value_serializer=IdentitySerializer()):
+    def __init__(self, *, connection=None, key=None, value_serializer=IdentitySerializer()):
         RedisAtom.__init__(self, connection, key, value_serializer)
 
     async def increment(self, n=1, *, tx=None):

@@ -1,6 +1,6 @@
-from .string_mapper import StringMapper
+from .atom_mapper import AtomMapper
 from redisobjects.serializer import UUIDSerializer
 
-class UUIDMapper(StringMapper):
+class UUIDMapper(AtomMapper):
     def __init__(self):
-        StringMapper.__init__(self, UUIDSerializer())
+        AtomMapper.__init__(self, UUIDSerializer())

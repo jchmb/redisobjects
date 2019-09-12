@@ -5,7 +5,7 @@ RedisList represents a linked list in Redis. This class supports push and pop op
 among other typical list operators.
 '''
 class RedisList:
-    def __init__(self, connection, key, serializer=IdentitySerializer()):
+    def __init__(self, *, connection=None, key=None, serializer=IdentitySerializer()):
         self.connection = connection
         self.key = key
         self.serializer = serializer
@@ -25,11 +25,11 @@ class RedisList:
         tx = tx or self.connection
         return await tx.execute('lpush', self.key, *self._serialize_values(values))
 
-    async def items(self, limit=1000):
+    async def items(self, limit=-1):
         results = await self.connection.execute('lrange', self.key, 0, limit)
         return (self.serializer.deserialize(value) for value in results)
 
-    async def list(self, limit=1000):
+    async def list(self, limit=-1):
         return list(await self.items(limit))
 
     async def pop_left(self):
