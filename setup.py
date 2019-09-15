@@ -18,6 +18,8 @@ setup(
     name='redisobjects',
     version='0.7.0',
     description='Object-oriented wrapper for aioredis.',
+    description_content_type='text/markdown',
+    long_description_content_type='text/markdown',
     long_description=long_description,
     author='Jochem Barelds',
     author_email='barelds.jochem@gmail.com',
