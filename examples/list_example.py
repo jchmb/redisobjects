@@ -3,7 +3,7 @@ import asyncio
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    example_list = redis.list('example.list')
+    example_list = redis.list('example:list')
     print(await example_list.list())
     await example_list.push_right('b')
     await example_list.push_right('c')

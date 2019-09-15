@@ -4,8 +4,8 @@ import asyncio
 async def main(loop):
     # Initialize and declare
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    s = redis.set('example.set:s') # the main set
-    t = redis.set('example.set:t') # the secondary set
+    s = redis.set('example:set:s') # the main set
+    t = redis.set('example:set:t') # the secondary set
     print(set(await s.items()))
     await s.add('a', 'b', 'c')
     print(set(await s.items()))

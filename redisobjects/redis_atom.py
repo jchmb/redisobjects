@@ -1,4 +1,5 @@
-from .serializer import IdentitySerializer
+from .redis_object import RedisObject
+from .serializers import IdentitySerializer
 
 import aioredis
 
@@ -7,10 +8,9 @@ RedisAtom represents a single key-value pair in a Redis database. Use the
 async method get() to retrieve its value from the database and use the async method
 set(x) to change its value to x.
 '''
-class RedisAtom:
-    def __init__(self, connection, key, serializer=IdentitySerializer()):
-        self.connection = connection
-        self.key = key
+class RedisAtom(RedisObject):
+    def __init__(self, *, connection=None, key=None, serializer=IdentitySerializer()):
+        RedisObject.__init__(self, connection=connection, key=key)
         self.serializer = serializer
 
     async def get(self):

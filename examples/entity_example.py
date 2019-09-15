@@ -1,25 +1,24 @@
 import redisobjects
 import asyncio
 
-from redisobjects.mapper import *
+from redisobjects import RedisAtom, RedisSet
 
-class DummyObject:
-    model = {
-        'name': AtomMapper(),
-        'friends': SetMapper(),
-    }
+class DummyEntity:
+    def __init__(self):
+        self.name = RedisAtom()
+        self.friends = RedisSet()
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    object_space = redis.object_space('test.dummyobject', DummyObject)
-    o = await object_space.create(DummyObject)
+    entity_space = redis.entity_space('example:dummy-entity', DummyEntity)
+    o = await entity_space.create(DummyEntity)
     await o.name.set('Jochem')
     await o.friends.add('Bob')
     await o.friends.add('Tom')
     await o.friends.add('Jerry')
     print(await o.name.get())
     print(await o.friends.set())
-    await object_space.remove(o)
+    await o.delete()
     print(await o.name.get())
     redis.close()
 

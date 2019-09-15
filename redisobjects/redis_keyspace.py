@@ -1,4 +1,4 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 from .redis_object_factory import RedisObjectFactory
 
 from shortuuid import uuid

@@ -1,4 +1,4 @@
-from .serializer import IdentitySerializer
+from .serializers import IdentitySerializer
 from .redis_atom import RedisAtom
 from .redis_list import RedisList
 from .redis_dict import RedisDict
@@ -11,17 +11,17 @@ class RedisObjectFactory:
     def _make_key(self, key):
         return key
 
-    def atom(self, key, value_serializer=IdentitySerializer()):
-        return RedisAtom(self.connection, self._make_key(key), value_serializer)
+    def atom(self, key, serializer=IdentitySerializer()):
+        return RedisAtom(connection=self.connection, key=self._make_key(key), serializer=serializer)
 
-    def integer(self, key, value_serializer=IdentitySerializer()):
-        return RedisInteger(self.connection, self._make_key(key), value_serializer)
+    def integer(self, key, serializer=IdentitySerializer()):
+        return RedisInteger(connection=self.connection, key=self._make_key(key), serializer=serializer)
 
-    def list(self, key, value_serializer=IdentitySerializer()):
-        return RedisList(self.connection, self._make_key(key), value_serializer)
+    def list(self, key, serializer=IdentitySerializer()):
+        return RedisList(connection=self.connection, key=self._make_key(key), serializer=serializer)
 
     def dict(self, key, value_serializer=IdentitySerializer(), field_serializer=IdentitySerializer()):
-        return RedisDict(self.connection, self._make_key(key), value_serializer, field_serializer)
+        return RedisDict(connection=self.connection, key=self._make_key(key), value_serializer=value_serializer, field_serializer=field_serializer)
 
-    def set(self, key, value_serializer=IdentitySerializer()):
-        return RedisSet(self.connection, self._make_key(key), value_serializer)
+    def set(self, key, serializer=IdentitySerializer()):
+        return RedisSet(connection=self.connection, key=self._make_key(key), serializer=erializer)

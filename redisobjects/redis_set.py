@@ -1,9 +1,9 @@
-from .serializer import IdentitySerializer
+from .redis_object import RedisObject
+from .serializers import IdentitySerializer
 
-class RedisSet:
-	def __init__(self, connection, key, value_serializer=IdentitySerializer()):
-		self.connection = connection
-		self.key = key
+class RedisSet(RedisObject):
+	def __init__(self, *, connection=None, key=None, value_serializer=IdentitySerializer()):
+		RedisObject.__init__(self, connection=connection, key=key)
 		self.value_serializer = value_serializer
 
 	def _serialize_values(self, values):
