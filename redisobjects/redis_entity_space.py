@@ -1,10 +1,12 @@
 from .serializers import IdentitySerializer, StringSerializer, TupleSerializer
 from .redis_keyspace import RedisKeyspace
 from .redis_atom import RedisAtom
+from .redis_object import RedisObject
 #from .redis_index_atom import RedisIndexAtom
 
 import importlib
 import uuid
+from types import MethodType
 
 class RedisEntitySpace:
     def __init__(self, db, keyspace, cls, *, key_serializer=IdentitySerializer(), key_factory=lambda: str(uuid.uuid4())):
@@ -30,16 +32,11 @@ class RedisEntitySpace:
         await cls_atom.set((cls.__module__, cls.__name__))
         return obj
 
-    async def remove(self, key):
-        if isinstance(key, object):
-            cls = key.__class__
-            key = key._id
-        else:
-            cls = await self.get_class(key)
-        if cls is not None:
-            await self.db.execute('del', self.get_attribute_key(key, '__class__'))
-            for attribute, _ in cls.model.items():
-                await self.db.execute('del', self.get_attribute_key(key, attribute))
+    async def remove(self, key, *, tx=None):
+        obj = await self.get(key)
+        if obj is None:
+            return False
+        return await obj.delete(tx=tx)
 
     def get_attribute_key(self, key, attribute):
         complete_key = '%s:%s:%s' % (self.keyspace, self.key_serializer.serialize(key), attribute)
@@ -50,8 +47,15 @@ class RedisEntitySpace:
         for attribute, prop in obj.__dict__.items():
             complete_key = self.get_attribute_key(key, attribute)
             prop = getattr(obj, attribute)
-            prop.key = complete_key
-            prop.connection = self.db
+            if isinstance(prop, RedisObject):
+                prop.key = complete_key
+                prop.connection = self.db
+        obj.__class_atom__ = RedisAtom(connection=self.db, key=self.get_attribute_key(key, '__class__'), serializer=self.cls_serializer)
+        async def delete(target, *, tx=None):
+            for _, prop in obj.__dict__.items():
+                if isinstance(prop, RedisObject):
+                    await prop.delete(tx=tx)
+        obj.delete = MethodType(delete, obj)
             # if isinstance(prop, RedisIndexAtom):
             #     prop.index_space =
             #setattr(obj, attribute, prop.map(self, attribute, self.db, complete_key, key))
@@ -66,13 +70,19 @@ class RedisEntitySpace:
             return None
         return cls
 
-    async def object(self, key):
+    async def get(self, key):
         cls = await self.get_class(key)
         obj = None
         if cls is not None:
             obj = cls()
             self.hydrate(cls, obj, key)
         return obj
+
+    '''
+    Deprecated. Use RedisEntitySpace::get instead.
+    '''
+    async def object(self, key):
+        return await self.get(key)
 
     async def get_index_atom(self, index, value):
         index_space = RedisKeyspace(self.db, '%s:__index__:%s:?' % (self.keyspace, index))

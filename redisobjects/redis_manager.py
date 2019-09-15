@@ -1,5 +1,5 @@
 from .redis_keyspace import RedisKeyspace
-from .redis_object_space import RedisEntitySpace
+from .redis_entity_space import RedisEntitySpace
 from .redis_object_factory import RedisObjectFactory
 from .redis_transaction import RedisTransaction
 from .serializers import IdentitySerializer

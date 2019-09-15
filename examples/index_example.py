@@ -1,31 +1,30 @@
 import redisobjects
+from redisobjects import RedisAtom, indexed
 import asyncio
 
-from redisobjects.mapper import *
-
 class Animal:
-    model = {
-        'name': IndexMapper(),
-        'favorite_color': AtomMapper(),
-    }
+    def __init__(self):
+        @indexed
+        self.name = RedisAtom()
+        self.favorite_color = RedisAtom()
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    object_space = redis.object_space('test.animal', Animal)
-    a = await  object_space.create(Animal)
+    entity_space = redis.entity_space('example:animal', Animal)
+    a = await  entity_space.create(Animal)
     await a.name.set('Alice')
     await a.favorite_color.set('red')
-    b = await object_space.create(Animal)
+    b = await entity_space.create(Animal)
     await b.name.set('Bob')
     await b.favorite_color.set('green')
-    aa = await object_space.find('name', 'Alice')
-    bb = await object_space.find('name', 'Bob')
+    aa = await entity_space.find('name', 'Alice')
+    bb = await entity_space.find('name', 'Bob')
     print(await aa.name.get())
     print(await bb.name.get())
     print(await aa.favorite_color.get())
     print(await bb.favorite_color.get())
-    await object_space.remove(aa)
-    await object_space.remove(bb)
+    await entity_space.remove(aa)
+    await entity_space.remove(bb)
     print(await aa.name.get())
     print(await bb.name.get())
     redis.close()

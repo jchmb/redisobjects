@@ -10,7 +10,7 @@ class DummyEntity:
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    entity_space = redis.entity_space('test:dummy-entity', DummyEntity)
+    entity_space = redis.entity_space('example:dummy-entity', DummyEntity)
     o = await entity_space.create(DummyEntity)
     await o.name.set('Jochem')
     await o.friends.add('Bob')
@@ -18,7 +18,7 @@ async def main(loop):
     await o.friends.add('Jerry')
     print(await o.name.get())
     print(await o.friends.set())
-    await object_space.remove(o)
+    await o.delete()
     print(await o.name.get())
     redis.close()
 

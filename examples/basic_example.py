@@ -3,7 +3,7 @@ import asyncio
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    atom = redis.atom('example.atom')
+    atom = redis.atom('example:atom')
     print(await atom.get())
     await atom.set('bla')
     print(await atom.get())

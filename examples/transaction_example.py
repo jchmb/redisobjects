@@ -3,8 +3,8 @@ import asyncio
 
 async def main(loop):
     redis = await redisobjects.connect('redis://localhost', loop=loop)
-    list = redis.list('example.list')
-    atom = redis.atom('example.atom')
+    list = redis.list('example:list')
+    atom = redis.atom('example:atom')
     tx = redis.create_transaction()
     await list.push_right('a', 'b', tx=tx)
     await atom.set('a', tx=tx)
