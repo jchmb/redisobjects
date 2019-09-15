@@ -13,7 +13,13 @@ class RedisManager(RedisObjectFactory):
     def keyspace(self, keyspace, key_serializer=IdentitySerializer()):
         return RedisKeyspace(self.connection, keyspace, key_serializer)
 
+    '''
+    Deprecated. Use RedisManager::entity_space instead.
+    '''
     def object_space(self, keyspace, cls, *, key_serializer=IdentitySerializer()):
+        return self.entity_space(keyspace, cls, key_serializer=key_serializer)
+
+    def entity_space(self, keyspace, cls, *, key_serializer=IdentitySerializer()):
         return RedisObjectSpace(self.connection, keyspace, cls, key_serializer=key_serializer)
 
     def create_transaction(self):

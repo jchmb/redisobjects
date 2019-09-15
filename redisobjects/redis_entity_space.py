@@ -6,7 +6,7 @@ from .redis_atom import RedisAtom
 import importlib
 import uuid
 
-class RedisObjectSpace:
+class RedisEntitySpace:
     def __init__(self, db, keyspace, cls, *, key_serializer=IdentitySerializer(), key_factory=lambda: str(uuid.uuid4())):
         self.db = db
         self.keyspace = keyspace
