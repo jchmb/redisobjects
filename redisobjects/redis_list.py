@@ -1,13 +1,13 @@
+from .redis_object import RedisObject
 from .serializers import IdentitySerializer
 
 '''
 RedisList represents a linked list in Redis. This class supports push and pop operators,
 among other typical list operators.
 '''
-class RedisList:
+class RedisList(RedisObject):
     def __init__(self, *, connection=None, key=None, serializer=IdentitySerializer()):
-        self.connection = connection
-        self.key = key
+        RedisObject.__init__(self, connection=connection, key=key)
         self.serializer = serializer
 
     def _serialize_values(self, values):

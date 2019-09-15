@@ -1,3 +1,4 @@
+from .redis_object import RedisObject
 from .redis_atom import RedisAtom
 from .redis_integer import RedisInteger
 from .redis_list import RedisList
@@ -11,6 +12,7 @@ from .connect import connect
 #from .decorators import indexed
 
 __all__ = [
+    'RedisObject',
     'RedisAtom',
     'RedisInteger',
     'RedisList',

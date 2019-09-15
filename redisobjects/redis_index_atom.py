@@ -1,10 +1,10 @@
+from .redis_object import RedisObject
 from .serializers import IdentitySerializer, StringSerializer
 from .redis_atom import RedisAtom
 
-class RedisIndexAtom:
+class RedisIndexAtom(RedisObject):
     def __init__(self, *, connection=None, key=None, index_space=None, index_type=None, primary_atom=None, key_serializer=IdentitySerializer(), index_serializer=StringSerializer()):
-        self.connection = connection
-        self.key = key
+        RedisObject.__init__(self, connection=connection, key=key)
         self.index_space = index_space
         self.index_type = index_type
         self.primary_atom = primary_atom
