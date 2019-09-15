@@ -1,5 +1,5 @@
 from .redis_keyspace import RedisKeyspace
-from .redis_object_space import RedisObjectSpace
+from .redis_object_space import RedisEntitySpace
 from .redis_object_factory import RedisObjectFactory
 from .redis_transaction import RedisTransaction
 from .serializers import IdentitySerializer
@@ -20,7 +20,7 @@ class RedisManager(RedisObjectFactory):
         return self.entity_space(keyspace, cls, key_serializer=key_serializer)
 
     def entity_space(self, keyspace, cls, *, key_serializer=IdentitySerializer()):
-        return RedisObjectSpace(self.connection, keyspace, cls, key_serializer=key_serializer)
+        return RedisEntitySpace(self.connection, keyspace, cls, key_serializer=key_serializer)
 
     def create_transaction(self):
         return RedisTransaction(self.connection)
