@@ -33,8 +33,12 @@ pipeline {
             }
         }
         stage('Deploy') {
+            environment {
+                PYPI_TOKEN = credentials('pypi-redisobjects')
+            }
             steps {
-                echo 'Deploying....'
+                echo 'Deploying to PyPi....'
+                sh "twine upload -u __token__ -p $PYPI_TOKEN dist/*"
             }
         }
     }
