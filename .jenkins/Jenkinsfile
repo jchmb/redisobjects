@@ -19,7 +19,12 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
-                sh 'python setup.py install'
+                sh 'python setup.py bdist_wheel'
+            }
+            post {
+                always {
+                    archiveArtifacts allowEmptyArchive: true, artifacts: 'dist/*whl', fingerprint: true
+                }
             }
         }
         stage('Test') {
