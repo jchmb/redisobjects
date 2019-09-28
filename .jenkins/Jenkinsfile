@@ -1,7 +1,8 @@
 pipeline {
     agent {
-        docker {
-            image 'python:3.6-alpine3.9'
+        dockerfile {
+            filename 'Dockerfile'
+            dir '.jenkins'
         }
     }
 
