@@ -19,6 +19,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building..'
+                sh 'rm -rf dist/*'
                 sh 'python setup.py bdist_wheel'
             }
             post {
