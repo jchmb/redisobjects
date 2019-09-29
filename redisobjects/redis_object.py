@@ -34,3 +34,12 @@ class RedisObject:
     async def delete(self, *, tx=None):
         tx = tx or self.connection
         return await tx.execute('del', self.key)
+
+    '''
+    Expire the key after the given duration.
+    :param int duration
+    :returns boolean
+    '''
+    async def expire(self, duration, *, tx=None):
+        tx = tx or self.connection
+        return await tx.execute('expire', self.key, duration)
