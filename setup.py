@@ -16,7 +16,7 @@ classifiers = [
 
 setup(
     name='redisobjects',
-    version='0.7.1',
+    version='0.7.2',
     description='Object-oriented wrapper for aioredis.',
     description_content_type='text/markdown',
     long_description_content_type='text/markdown',
