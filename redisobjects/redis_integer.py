@@ -6,8 +6,8 @@ A RedisInteger is a RedisAtom with an integer as its value and additional method
 for manipulating integers.
 '''
 class RedisInteger(RedisAtom):
-    def __init__(self, *, connection=None, key=None, value_serializer=GenericSerializer(int)):
-        RedisAtom.__init__(self, connection, key, value_serializer)
+    def __init__(self, *, connection=None, key=None):
+        RedisAtom.__init__(self, connection=connection, key=key, value_serializer=GenericSerializer(int))
 
     '''
     Increment the integer.
