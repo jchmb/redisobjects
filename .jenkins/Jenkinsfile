@@ -20,7 +20,7 @@ pipeline {
             steps {
                 echo 'Building..'
                 sh 'rm -rf dist/*'
-                sh 'python setup.py bdist_wheel'
+                sh 'python setup.py install bdist_wheel'
             }
             post {
                 always {
