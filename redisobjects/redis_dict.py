@@ -35,6 +35,10 @@ class RedisDict(RedisObject):
     '''
     async def items(self):
         results = await self.connection.execute('hgetall', self.key)
+        # Some Redis APIs return dicts instead of lists, which is very inconvenient,
+        # because we expect a list.
+        if type(results) == dict:
+            return results.items()
         size = int(len(results) / 2)
         return ((self.field_serializer.deserialize(results[2 * i]), self.value_serializer.deserialize(results[2 * i + 1])) for i in range(size))
 
@@ -43,7 +47,7 @@ class RedisDict(RedisObject):
     :returns dict
     '''
     async def dict(self):
-        return dict(await self.items())
+        return {k: v for k, v in (await self.items())}
 
     '''
     Get the size of the hash.

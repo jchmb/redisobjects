@@ -39,3 +39,13 @@ class RedisDictTest(unittest.TestCase):
         await test_dict.set('key', 'value')
         await test_dict.remove('key')
         self.assertIsNone(await test_dict.get('key'))
+
+    @async_test
+    async def test_dict_returns_complete_contents_on_call(self):
+        redis = connect_fakeredis()
+        test_dict = redis.dict('test:dict')
+        await test_dict.set(b'a', b'1')
+        await test_dict.set(b'b', b'2')
+        await test_dict.set(b'c', b'3')
+        expected = {b'a': b'1', b'b': b'2', b'c': b'3'}
+        self.assertEqual(expected, await test_dict.dict())
