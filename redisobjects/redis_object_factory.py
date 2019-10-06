@@ -24,4 +24,4 @@ class RedisObjectFactory:
         return RedisDict(connection=self.connection, key=self._make_key(key), value_serializer=value_serializer, field_serializer=field_serializer)
 
     def set(self, key, serializer=IdentitySerializer()):
-        return RedisSet(connection=self.connection, key=self._make_key(key), serializer=erializer)
+        return RedisSet(connection=self.connection, key=self._make_key(key), serializer=serializer)

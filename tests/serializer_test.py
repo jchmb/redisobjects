@@ -36,7 +36,7 @@ class SerializerTest(unittest.TestCase):
         self.assertSerializerConsistent(serialized, deserialized, serializer=serializer)
 
     def test_json_serializer(self):
-        serializer = JsonSerializer()
+        serializer = JsonSerializer(sort_keys=True)
         deserialized = [
             {},
             {'a': '1', 'b': 2},
@@ -60,7 +60,7 @@ class SerializerTest(unittest.TestCase):
         self.assertSerializerConsistent(serialized, deserialized, serializer=serializer)
 
     def test_tuple_serializer(self):
-        serializer = TupleSerializer(IdentitySerializer(), StringSerializer(), JsonSerializer())
+        serializer = TupleSerializer(IdentitySerializer(), StringSerializer(), JsonSerializer(sort_keys=True))
         deserialized = [
             (b'', '', {}),
             (b'abc', 'aëöó', {'a': '1', 'b': 2}),
