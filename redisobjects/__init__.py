@@ -8,7 +8,8 @@ from .redis_index_atom import RedisIndexAtom
 from .redis_keyspace import RedisKeyspace
 from .redis_entity_space import RedisEntitySpace
 from .redis_manager import RedisManager
-from .connect import connect
+from .redis_adapter import RedisAdapter
+from .connect import connect, connect_adapter, connect_fakeredis
 #from .decorators import indexed
 
 __all__ = [
@@ -22,6 +23,9 @@ __all__ = [
     'RedisKeyspace',
     'RedisEntitySpace',
     'RedisManager',
+    'RedisAdapter',
     'connect',
+    'connect_adapter',
+    'connect_fakeredis',
     #'indexed',
 ]

@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 with open('README.md', 'r') as f:
     long_description = f.read()
 
-install_requires = ['aioredis', 'shortuuid']
+install_requires = ['aioredis', 'shortuuid', 'fakeredis']
 classifiers = [
     'Topic :: Database',
     'Topic :: Database :: Database Engines/Servers',
@@ -16,7 +16,7 @@ classifiers = [
 
 setup(
     name='redisobjects',
-    version='0.7.5',
+    version='0.7.6',
     description='Object-oriented wrapper for aioredis.',
     description_content_type='text/markdown',
     long_description_content_type='text/markdown',

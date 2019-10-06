@@ -7,7 +7,7 @@ for manipulating integers.
 '''
 class RedisInteger(RedisAtom):
     def __init__(self, *, connection=None, key=None):
-        RedisAtom.__init__(self, connection=connection, key=key, serializer=GenericSerializer(int))
+        RedisAtom.__init__(self, connection=connection, key=key, serializer=GenericSerializer(int)) # <--- Serializing ints to strings causes it to fail?
 
     '''
     Increment the integer.
